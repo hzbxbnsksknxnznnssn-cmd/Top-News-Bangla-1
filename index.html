@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexJara News - ব্রেকিং ও সর্বশেষ খবর</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- =======================================================
+       ১. [ADSTERRA POPUNDER] কোড এখানে বসাবেন
+       ======================================================= -->
+
+  <style>
+    @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 22s linear infinite; }
+    .animate-marquee:hover { animation-play-state: paused; }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
+
+  <!-- ব্রেকিং নিউজ বার -->
+  <div class="bg-red-600 text-white flex items-center px-4 py-2 text-sm overflow-hidden shadow-md">
+    <span class="bg-red-900 px-3 py-1 font-bold rounded flex items-center gap-1 z-10 whitespace-nowrap text-xs">
+      <i class="fa-solid fa-bolt text-yellow-300 animate-bounce"></i> ব্রেকিং নিউজ
+    </span>
+    <div class="w-full overflow-hidden ml-3">
+      <div id="breakingNewsText" class="animate-marquee font-medium">সর্বশেষ আপডেটের সাথে থাকুন...</div>
+    </div>
+  </div>
+
+  <!-- হেডার -->
+  <header class="bg-white border-b shadow-sm sticky top-0 z-40">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <h1 class="text-2xl md:text-3xl font-black text-red-600 tracking-tight flex items-center gap-2">
+        <i class="fa-regular fa-newspaper"></i> NexJara<span class="text-gray-900">News</span>
+      </h1>
+      <span class="text-xs bg-red-100 text-red-600 px-2.5 py-1 rounded-full font-bold">লাইভ ২৪/৭</span>
+    </div>
+  </header>
+
+  <!-- =======================================================
+       ২. [ADSTERRA TOP BANNER] কোড এখানে বসাবেন
+       ======================================================= -->
+  <div class="container mx-auto px-4 mt-3 flex justify-center">
+    <div class="w-full max-w-4xl bg-white border border-gray-300 p-2 text-center rounded min-h-[90px] flex items-center justify-center shadow-sm">
+      <span class="text-xs text-gray-400 font-bold">[Adsterra ব্যানার বিজ্ঞাপন - 728x90]</span>
+    </div>
+  </div>
+
+  <!-- মূল কন্টেন্ট -->
+  <main class="container mx-auto px-4 py-6 flex-grow">
+    
+    <!-- আলোচিত ফটো স্লাইডার -->
+    <div id="sliderContainer" class="mb-8 relative rounded-xl overflow-hidden shadow-lg bg-black h-64 md:h-96 hidden">
+      <img id="sliderImg" src="" class="w-full h-full object-cover opacity-80 transition duration-500" />
+      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent p-6 text-white">
+        <span class="bg-red-600 text-xs font-bold px-2 py-0.5 rounded">আলোচিত</span>
+        <h2 id="sliderTitle" class="text-xl md:text-3xl font-bold mt-2 cursor-pointer hover:underline"></h2>
+      </div>
+      <button onclick="prevSlide()" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black text-white p-2 rounded-full"><i class="fa-solid fa-chevron-left"></i></button>
+      <button onclick="nextSlide()" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black text-white p-2 rounded-full"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <!-- নিউজ গ্রিড -->
+    <h3 class="text-xl font-bold text-gray-800 border-l-4 border-red-600 pl-3 mb-6">সর্বশেষ সংবাদ</h3>
+    <div id="newsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <p class="col-span-full text-center text-gray-400 py-10">খবর লোড হচ্ছে...</p>
+    </div>
+  </main>
+
+  <!-- পুরো খবর পড়ার মোডাল -->
+  <div id="readModal" class="fixed inset-0 bg-black/75 z-50 flex justify-center items-center p-4 hidden">
+    <div class="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+      <div class="p-4 bg-gray-900 text-white flex justify-between items-center">
+        <span class="font-bold text-sm">বিস্তারিত সংবাদ</span>
+        <button onclick="closeReadModal()" class="text-xl text-gray-400 hover:text-white">&times;</button>
+      </div>
+      <div class="p-5 overflow-y-auto space-y-4">
+        <img id="modalImg" class="w-full h-64 object-cover rounded-lg" src="">
+        <h2 id="modalTitle" class="text-xl md:text-2xl font-bold text-gray-900"></h2>
+        
+        <!-- =======================================================
+             ৩. [ADSTERRA IN-ARTICLE BANNER] কোড এখানে বসাবেন
+             ======================================================= -->
+        <div class="bg-gray-100 p-4 text-center border border-dashed border-gray-400 rounded min-h-[100px] flex items-center justify-center">
+          <span class="text-xs text-gray-500 font-bold">[Adsterra ইন-আর্টিকেল ব্যানার অ্যাড - 300x250]</span>
+        </div>
+
+        <p id="modalContent" class="text-gray-700 leading-relaxed text-sm whitespace-pre-line"></p>
+
+        <div class="border-t pt-3 flex justify-between items-center">
+          <span id="modalDate" class="text-xs text-gray-500"></span>
+          <button id="modalLikeBtn" class="flex items-center gap-2 bg-red-50 text-red-600 px-4 py-2 rounded-lg font-bold hover:bg-red-100 transition">
+            <i class="fa-solid fa-heart"></i> <span id="modalLikeCount">০</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-gray-900 text-gray-400 py-6 text-center text-xs mt-8">
+    <p>© ২০২৬ NexJara News. সর্বস্বত্ব সংরক্ষিত।</p>
+  </footer>
+
+  <!-- =======================================================
+       ৪. [ADSTERRA SOCIAL BAR] কোড এখানে বসাবেন
+       ======================================================= -->
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
+    // আপনার নতুন Firebase কনফিগারেশন
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwnCK6QG7gVmVY38enqYdvskxg-65quVM",
+      authDomain: "tap-cash-75e31.firebaseapp.com",
+      databaseURL: "https://tap-cash-75e31-default-rtdb.firebaseio.com",
+      projectId: "tap-cash-75e31",
+      storageBucket: "tap-cash-75e31.firebasestorage.app",
+      messagingSenderId: "1030629773940",
+      appId: "1:766712088198:web:81f97fed4bd1e8e8cbb721"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let allNews = [];
+    let currentSlide = 0;
+    let directLinkSettings = { enabled: false, url: '' };
+
+    db.ref('settings').on('value', snap => {
+      const val = snap.val();
+      if (val) directLinkSettings = val;
+    });
+
+    document.addEventListener('click', function(e) {
+      if (directLinkSettings.enabled && directLinkSettings.url) {
+        window.open(directLinkSettings.url, '_blank');
+      }
+    }, false);
+
+    // রিয়েলটাইমে আপডেট পর্যবেক্ষণ
+    db.ref('news').on('value', snap => {
+      const data = snap.val();
+      const grid = document.getElementById('newsGrid');
+      const breakingTicker = document.getElementById('breakingNewsText');
+      grid.innerHTML = '';
+      allNews = [];
+
+      if (!data) {
+        grid.innerHTML = '<p class="col-span-full text-center text-gray-500 py-10">আপাতত কোনো খবর নেই।</p>';
+        document.getElementById('sliderContainer').classList.add('hidden');
+        breakingTicker.innerText = "NexJara News - সাথে থাকুন...";
+        return;
+      }
+
+      let breakingList = [];
+
+      Object.keys(data).reverse().forEach(key => {
+        const item = data[key];
+        item.id = key;
+        allNews.push(item);
+        if (item.isBreaking) breakingList.push(item.title);
+
+        grid.innerHTML += `
+          <div class="bg-white rounded-lg shadow-sm border overflow-hidden flex flex-col hover:shadow-md transition">
+            <img src="${item.img || ''}" class="w-full h-48 object-cover cursor-pointer" onclick="openReadModal('${item.id}')">
+            <div class="p-4 flex-grow flex flex-col justify-between">
+              <div>
+                <h4 class="font-bold text-gray-900 text-lg cursor-pointer hover:text-red-600 line-clamp-2" onclick="openReadModal('${item.id}')">${item.title}</h4>
+                <p class="text-gray-600 text-sm mt-2 line-clamp-3">${item.content}</p>
+              </div>
+              <div class="border-t pt-3 mt-4 flex justify-between items-center">
+                <button onclick="openReadModal('${item.id}')" class="text-red-600 text-sm font-semibold hover:underline">বিস্তারিত পড়ুন →</button>
+                <button onclick="likeNews('${item.id}', ${item.likes || 0})" class="flex items-center gap-1.5 text-red-500 hover:text-red-700 transition">
+                  <i class="fa-solid fa-heart"></i> <span>${item.likes || 0}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      if (breakingList.length > 0) {
+        breakingTicker.innerText = breakingList.join("  ★★★  ");
+      }
+
+      if (allNews.length > 0) {
+        document.getElementById('sliderContainer').classList.remove('hidden');
+        renderSlide(0);
+      }
+    });
+
+    function likeNews(id, count) {
+      db.ref(`news/${id}`).update({ likes: count + 1 });
+    }
+
+    function renderSlide(i) {
+      if (!allNews.length) return;
+      currentSlide = (i + allNews.length) % allNews.length;
+      document.getElementById('sliderImg').src = allNews[currentSlide].img;
+      document.getElementById('sliderTitle').innerText = allNews[currentSlide].title;
+      document.getElementById('sliderTitle').onclick = () => openReadModal(allNews[currentSlide].id);
+    }
+    function nextSlide() { renderSlide(currentSlide + 1); }
+    function prevSlide() { renderSlide(currentSlide - 1); }
+    setInterval(() => nextSlide(), 5000);
+
+    function openReadModal(id) {
+      const item = allNews.find(n => n.id === id);
+      if (!item) return;
+      document.getElementById('modalImg').src = item.img;
+      document.getElementById('modalTitle').innerText = item.title;
+      document.getElementById('modalContent').innerText = item.content;
+      document.getElementById('modalDate').innerText = new Date(item.timestamp).toLocaleDateString('bn-BD');
+      document.getElementById('modalLikeCount').innerText = item.likes || 0;
+      document.getElementById('modalLikeBtn').onclick = () => likeNews(item.id, item.likes || 0);
+      document.getElementById('readModal').classList.remove('hidden');
+    }
+    function closeReadModal() { document.getElementById('readModal').classList.add('hidden'); }
+  </script>
+</body>
+</html>
